@@ -72,11 +72,18 @@ public class NotificationListenerExampleService extends NotificationListenerServ
             mediaPlayer.start();
         }
     }
-    // change this to not use the decimal as the end. sometimes its a plain dollar amount like $15 and not $15.44
+    
     private int extractAmountFromBatchString(String str) {
         int dollarSignIndex = str.indexOf("$") ;
-        int dollarPeriodIndex  = str.indexOf(".", dollarSignIndex);
-        String strDollarAmount = str.substring( dollarSignIndex + 1, dollarPeriodIndex );
+        int dollarEndIndex = 0;
+        
+        // Sometimes dollar amount is not a decimal, so check for that..
+        if (str.contains(".")) {
+            dollarEndIndex = str.indexOf(".", dollarSignIndex);
+        }  else {
+            dollarEndIndex = str.indexOf(" ", dollarSignIndex);
+        }
+        String strDollarAmount = str.substring( dollarSignIndex + 1, dollarEndIndex );
         return Integer.valueOf(strDollarAmount);
 
     }
